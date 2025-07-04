@@ -1,13 +1,54 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState } from 'react';
+import { useTaskTide } from '@/hooks/useTaskTide';
+import Onboarding from '@/components/Onboarding';
+import Dashboard from '@/components/Dashboard';
+import FocusMode from '@/components/FocusMode';
 
 const Index = () => {
+  const { user, tasks, isOnboarded, completeOnboarding, completeTask } = useTaskTide();
+  const [focusMode, setFocusMode] = useState<{ active: boolean; task?: any }>({ active: false });
+
+  const handleStartFocus = () => {
+    const nextTask = tasks.find(task => !task.completed);
+    if (nextTask) {
+      setFocusMode({ active: true, task: nextTask });
+    }
+  };
+
+  const handleCompleteFocus = () => {
+    if (focusMode.task) {
+      completeTask(focusMode.task.id);
+    }
+    setFocusMode({ active: false });
+  };
+
+  const handleExitFocus = () => {
+    setFocusMode({ active: false });
+  };
+
+  if (!isOnboarded) {
+    return <Onboarding onComplete={completeOnboarding} />;
+  }
+
+  if (focusMode.active && focusMode.task) {
+    return (
+      <FocusMode
+        taskTitle={focusMode.task.title}
+        duration={focusMode.task.duration}
+        onComplete={handleCompleteFocus}
+        onExit={handleExitFocus}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <Dashboard
+      user={user!}
+      tasks={tasks}
+      onStartFocus={handleStartFocus}
+      onCompleteTask={completeTask}
+    />
   );
 };
 
