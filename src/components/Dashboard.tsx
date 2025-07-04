@@ -3,6 +3,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { useAuth } from '@/hooks/useAuth';
+import { LogOut } from 'lucide-react';
 import Logo from './Logo';
 import TaskWave from './TaskWave';
 import { User, Task } from '@/types';
@@ -15,9 +17,14 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ user, tasks, onStartFocus, onCompleteTask }: DashboardProps) => {
+  const { signOut } = useAuth();
   const completedToday = tasks.filter(task => task.completed).length;
   const progressPercentage = (completedToday / user.dailyGoal) * 100;
   const pendingTasks = tasks.filter(task => !task.completed);
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <div className="min-h-screen p-4 pb-20">
@@ -30,9 +37,19 @@ const Dashboard = ({ user, tasks, onStartFocus, onCompleteTask }: DashboardProps
             <p className="text-sm text-muted-foreground">Surf through your tasks</p>
           </div>
         </div>
-        <div className="text-right">
-          <div className="text-2xl">{user.avatar}</div>
-          <p className="text-sm font-medium">{user.name}</p>
+        <div className="flex items-center space-x-3">
+          <div className="text-right">
+            <div className="text-2xl">{user.avatar}</div>
+            <p className="text-sm font-medium">{user.name}</p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSignOut}
+            className="ml-2"
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 

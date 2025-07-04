@@ -9,7 +9,134 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      focus_sessions: {
+        Row: {
+          completed: boolean
+          duration: number
+          end_time: string | null
+          id: string
+          start_time: string | null
+          task_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          completed?: boolean
+          duration: number
+          end_time?: string | null
+          id?: string
+          start_time?: string | null
+          task_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          completed?: boolean
+          duration?: number
+          end_time?: string | null
+          id?: string
+          start_time?: string | null
+          task_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "focus_sessions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "focus_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar: string
+          created_at: string | null
+          daily_goal: number
+          id: string
+          level: number
+          name: string
+          streak: number
+          total_points: number
+          updated_at: string | null
+        }
+        Insert: {
+          avatar?: string
+          created_at?: string | null
+          daily_goal?: number
+          id: string
+          level?: number
+          name: string
+          streak?: number
+          total_points?: number
+          updated_at?: string | null
+        }
+        Update: {
+          avatar?: string
+          created_at?: string | null
+          daily_goal?: number
+          id?: string
+          level?: number
+          name?: string
+          streak?: number
+          total_points?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          completed: boolean
+          completed_at: string | null
+          created_at: string | null
+          difficulty: string
+          duration: number
+          id: string
+          points: number
+          subject: string
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string | null
+          difficulty: string
+          duration: number
+          id?: string
+          points: number
+          subject: string
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string | null
+          difficulty?: string
+          duration?: number
+          id?: string
+          points?: number
+          subject?: string
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
