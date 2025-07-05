@@ -4,7 +4,7 @@ import { useTaskTide } from '@/hooks/useTaskTide';
 import { useAuth } from '@/hooks/useAuth';
 import Dashboard from '@/components/Dashboard';
 import FocusMode from '@/components/FocusMode';
-import { Navigate } from 'react-router-dom';
+import LandingPage from '@/components/LandingPage';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Logo from '@/components/Logo';
@@ -33,7 +33,7 @@ const Index = () => {
   };
 
   // Show loading while checking auth
-  if (authLoading || loading) {
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -44,13 +44,13 @@ const Index = () => {
     );
   }
 
-  // Redirect to auth if not authenticated
+  // Show landing page if not authenticated
   if (!authUser) {
-    return <Navigate to="/auth" replace />;
+    return <LandingPage />;
   }
 
   // Show loading message if user profile not loaded yet
-  if (!user) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
